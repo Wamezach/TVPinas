@@ -1,10 +1,9 @@
-<?php
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TVPinas (Shaka+Firebase+Search)</title>
+    <title>TVPinas (Shaka+Firebase+Search+DRM)</title>
     <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_the_Philippines.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Shaka Player -->
@@ -334,7 +333,7 @@
                 };
             }
             tile.addEventListener('click', () => {
-                loadChannel(channel.url, channel.name);
+                loadChannel(channel.url, channel.name, channel.key);
                 showPlayerView();
             });
             return tile;
@@ -416,7 +415,7 @@
         function isManifestUrl(url) {
             return url.endsWith('.mpd') || url.endsWith('.m3u8');
         }
-        async function loadChannel(url, name) {
+        async function loadChannel(url, name, key) {
             loading.classList.remove('hidden');
             if (shakaPlayer) shakaPlayer.destroy();
             video.pause();
@@ -434,6 +433,19 @@
                 alert(`Error loading channel: ${name}. Stream may be offline or not supported.`);
                 showBrowseView();
             });
+
+            // DRM: ClearKey Support
+            if (key && key.includes(':')) {
+                const [keyId, keyVal] = key.split(':');
+                shakaPlayer.configure({
+                    drm: {
+                        clearKeys: {
+                            [keyId]: keyVal
+                        }
+                    }
+                });
+            }
+
             try {
                 await shakaPlayer.load(url);
                 video.play().catch(e => {});
@@ -447,7 +459,7 @@
         backToBrowseBtn.addEventListener('click', showBrowseView);
         heroPlayButton.addEventListener('click', () => {
             if (featuredChannel) {
-                loadChannel(featuredChannel.url, featuredChannel.name);
+                loadChannel(featuredChannel.url, featuredChannel.name, featuredChannel.key);
                 showPlayerView();
             }
         });
@@ -490,7 +502,8 @@
                         allChannels.push({
                             name: data.name,
                             url: data.url,
-                            logoUrl: data.image || ""
+                            logoUrl: data.image || "",
+                            key: data.key || ""
                         });
                     }
                 });
