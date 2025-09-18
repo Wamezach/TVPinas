@@ -382,6 +382,18 @@
                 document.getElementById('aboutOverlay').classList.remove('active');
         });
 
+        // --- Android Back Key Fix ---
+        function showPlayerViewWithHistory() {
+            showPlayerView();
+            history.pushState({player: true}, "Player", "#player");
+        }
+        function handlePopState(e) {
+            if (!playerView.classList.contains('hidden')) {
+                showBrowseView();
+            }
+        }
+        window.addEventListener('popstate', handlePopState);
+
         // IPTV logic
         const browseView = document.getElementById('browseView');
         const playerView = document.getElementById('playerView');
@@ -459,12 +471,12 @@
             }
             tile.addEventListener('click', () => {
                 loadChannel(channel.url, channel.name, channel.key);
-                showPlayerView();
+                showPlayerViewWithHistory();
             });
             tile.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     loadChannel(channel.url, channel.name, channel.key);
-                    showPlayerView();
+                    showPlayerViewWithHistory();
                 }
             });
             return tile;
@@ -583,11 +595,14 @@
             }
         }
 
-        backToBrowseBtn.addEventListener('click', showBrowseView);
+        backToBrowseBtn.addEventListener('click', () => {
+            showBrowseView();
+            history.back();
+        });
         heroPlayButton.addEventListener('click', () => {
             if (featuredChannel) {
                 loadChannel(featuredChannel.url, featuredChannel.name, featuredChannel.key);
-                showPlayerView();
+                showPlayerViewWithHistory();
             }
         });
         document.addEventListener('keydown', (e) => {
