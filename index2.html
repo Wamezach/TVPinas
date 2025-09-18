@@ -7,23 +7,47 @@
     <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/television.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.6.0/shaka-player.compiled.js"></script>
-    <!-- Use compat version for both app and firestore -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <style>
-        /* ...your styles unchanged... */
         body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #18181b 40%, #1a202c 100%); color: #fff; }
         .hero-gradient { background-image: linear-gradient(to right, rgba(0,0,0,0.8) 20%, rgba(0,0,0,0.2) 60%, transparent 100%);}
         .row-container::-webkit-scrollbar {display: none;}
         .row-container { -ms-overflow-style: none; scrollbar-width: none;}
-        .channel-tile { transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s; flex-shrink: 0; position: relative; overflow: visible;}
-        .channel-tile:hover, .channel-tile:focus { transform: scale(1.08) rotate(-2deg); z-index: 20; box-shadow: 0 14px 32px rgba(0,0,0,0.7), 0 0 0 3px #e50914;}
+        .channel-tile {
+            transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s;
+            flex-shrink: 0;
+            position: relative;
+            overflow: visible;
+        }
+        .channel-tile:hover, .channel-tile:focus {
+            transform: scale(1.08) rotate(-2deg);
+            z-index: 20;
+            box-shadow: 0 14px 32px rgba(0,0,0,0.7), 0 0 0 3px #e50914;
+        }
         .channel-tile:focus { outline: 3px solid #fff; }
-        .channel-tile .channel-play { opacity: 0; transition: opacity 0.2s, transform 0.2s; position: absolute; bottom: 16px; right: 16px; background: #e50914; color: #fff; border-radius: 50%; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 6px 20px rgba(0,0,0,0.5); transform: scale(0.85);}
-        .channel-tile:hover .channel-play, .channel-tile:focus .channel-play { opacity: 1; transform: scale(1.07);}
+        .channel-tile .channel-play {
+            opacity: 0;
+            transition: opacity 0.2s, transform 0.2s;
+            position: absolute;
+            bottom: 16px; right: 16px;
+            background: #e50914;
+            color: #fff;
+            border-radius: 50%;
+            width: 42px; height: 42px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+            transform: scale(0.85);
+        }
+        .channel-tile:hover .channel-play,
+        .channel-tile:focus .channel-play {
+            opacity: 1;
+            transform: scale(1.07);
+        }
         .row-arrow { opacity: 0; transition: opacity 0.2s; background-color: rgba(0,0,0,0.5);}
         .row:hover .row-arrow { opacity: 1;}
         .loader { border: 5px solid #4b5563; border-top: 5px solid #e50914; border-radius: 50%; width: 60px; height: 60px; animation: spin 1.2s linear infinite;}
@@ -36,18 +60,163 @@
         footer { background: transparent; color: #b3b3b3; padding: 2rem 0; }
         .footer-link { color: #b3b3b3; text-decoration: underline; }
         .footer-link:hover { color: #fff; }
-        .footer-icons a { margin-right: 1rem; color: #e50914; font-size: 2rem; transition: color 0.2s, transform 0.2s; filter: drop-shadow(0 2px 8px #e5091450);}
+        .footer-icons a {
+            margin-right: 1rem;
+            color: #e50914;
+            font-size: 2rem;
+            transition: color 0.2s, transform 0.2s;
+            filter: drop-shadow(0 2px 8px #e5091450);
+        }
         .footer-icons a:hover { color: #fff; transform: scale(1.18) rotate(-8deg);}
         .category-icon { font-size: 1.3em; margin-right: 0.45em; vertical-align: middle; }
-        .about-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s;}
-        .about-overlay.active { opacity: 1; pointer-events: auto;}
-        .about-modal { background: #18181b; color: #fff; border-radius: 1rem; padding: 2rem 1.2rem; width: 90vw; max-width: 400px; max-height: 92vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.6); position: relative; text-align: center; animation: fadeInModal 0.45s cubic-bezier(.38,2,.46,.87);}
-        @media (max-width: 500px) { .about-modal { padding: 1rem 0.4rem; max-width: 98vw; }}
-        @keyframes fadeInModal { from { opacity: 0; transform: scale(.95) translateY(24px);} to { opacity: 1; transform: scale(1) translateY(0);}}
-        .about-close { position: absolute; right: 1rem; top: 1rem; background: none; border: none; font-size: 2rem; color: #b3b3b3; cursor: pointer; transition: color 0.15s, transform 0.18s;}
-        .about-close:hover { color: #e50914; transform: rotate(8deg);}
-        .about-logo { width: 65px; height: 65px; margin-bottom: 1rem; border-radius: 12px; background: #18181b; box-shadow: 0 2px 16px rgba(255,255,255,0.07); display: inline-block; animation: popLogo 0.8s cubic-bezier(.38,2,.46,.87);}
-        @keyframes popLogo { 0% { transform: scale(0.7);} 70% { transform: scale(1.16);} 100% { transform: scale(1);}}
+
+        /* About overlay and modal styles */
+        .about-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .about-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .about-modal {
+            background: #191923;
+            color: #fff;
+            border-radius: 1.2rem;
+            padding: 2.2rem 1.4rem 1.6rem 1.4rem;
+            width: 92vw;
+            max-width: 420px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.55);
+            position: relative;
+            text-align: left;
+            animation: fadeInModal 0.45s cubic-bezier(.38,2,.46,.87);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        @keyframes fadeInModal {
+            from { opacity: 0; transform: scale(.95) translateY(24px);}
+            to { opacity: 1; transform: scale(1) translateY(0);}
+        }
+        .about-close {
+            position: absolute;
+            right: 1.1rem;
+            top: 1rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #b3b3b3;
+            cursor: pointer;
+            transition: color 0.15s, transform 0.18s;
+            z-index: 2;
+        }
+        .about-close:hover { color: #E50914; transform: rotate(8deg);}
+        .about-logo {
+            width: 65px;
+            height: 65px;
+            margin-bottom: 1.1rem;
+            border-radius: 14px;
+            background: #18181b;
+            box-shadow: 0 2px 16px rgba(255,255,255,0.07);
+            display: inline-block;
+            animation: popLogo 0.8s cubic-bezier(.38,2,.46,.87);
+        }
+        @keyframes popLogo {
+            0% { transform: scale(0.7);}
+            70% { transform: scale(1.16);}
+            100% { transform: scale(1);}
+        }
+        .about-title {
+            font-size: 1.7rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 0.3em;
+            letter-spacing: 0.03em;
+            display: flex;
+            align-items: center;
+            gap: 0.45em;
+            justify-content: center;
+        }
+        .text-primary { color: #E50914; }
+        .about-brand { color: #2F80ED; }
+        .about-content {
+            width: 100%;
+            max-height: 60vh;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            margin-top: 1em;
+            padding-bottom: 0.5em;
+        }
+        .about-content::-webkit-scrollbar { display: none; }
+        .about-features {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35em;
+            margin-bottom: 1em;
+        }
+        .feature-row {
+            display: flex;
+            align-items: center;
+            gap: 0.85em;
+            padding: 0.3em 0;
+            font-size: 1.12em;
+            font-weight: 600;
+        }
+        .feature-icon {
+            font-size: 1.3em;
+            min-width: 1.3em;
+            text-shadow: 0 2px 8px #0001;
+        }
+        .feature-label { color: #fff; }
+        .about-desc {
+            margin-top: 0.7em;
+            font-size: 1.06em;
+            line-height: 1.5;
+        }
+        .about-highlight {
+            color: #E50914;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+        }
+        .about-contact {
+            margin-top: 0.8em;
+            margin-bottom: 0.5em;
+            font-size: 1em;
+        }
+        .about-disclaimer {
+            margin-top: 1.2em;
+            color: #ccc;
+            font-size: 0.97em;
+            text-align: center;
+        }
+        .footer-link {
+            text-decoration: underline;
+            transition: color 0.17s;
+        }
+        .footer-link:hover { color: #fff; }
+        @media (max-width: 500px) {
+            .about-modal { padding: 1.2rem 0.5rem 1.2rem 0.5rem; max-width: 98vw; }
+            .about-content { max-height: 55vh; }
+            .about-title { font-size: 1.19rem; }
+        }
+
+        .visit-counter {
+            margin-top: 12px;
+            text-align: center;
+            color: #e50914;
+            font-weight: 700;
+            font-size: 1.07rem;
+            letter-spacing: 0.03em;
+        }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -104,39 +273,64 @@
         </div>
     </footer>
 
-    <!-- About Overlay -->
+    <!-- About Overlay (fixed, professional, colored icons, no overlap/scrollbar) -->
     <div id="aboutOverlay" class="about-overlay">
         <div class="about-modal">
             <button class="about-close" id="closeAbout" title="Close">&times;</button>
             <img src="https://img.icons8.com/color/96/television.png" class="about-logo" alt="TVPinas logo">
-            <h2 class="text-2xl font-bold mb-2 flex items-center justify-center gap-2">
-                <i class="fas fa-tv text-e50914"></i> About TVPinas
+            <h2 class="about-title">
+                <i class="fas fa-tv text-primary"></i> About <span class="about-brand">TVPinas</span>
             </h2>
-            <p class="mb-4 text-gray-300">
-                <span class="inline-flex items-center gap-2 font-semibold text-lg text-e50914">
-                    <i class="fas fa-bolt"></i> Fast&nbsp; 
-                    <i class="fas fa-layer-group"></i> Grouped&nbsp; 
-                    <i class="fas fa-mobile-alt"></i> Responsive
-                </span><br>
-                Modern demo IPTV player for PH channels. Powered by Shaka Player, Firebase, and a sleek UI.<br>
-                <br>
-                <b>Features:</b><br>
-                <span class="inline-flex items-center gap-2">
-                    <i class="fas fa-search"></i> Fast search&nbsp; 
-                    <i class="fas fa-th-large"></i> Categories&nbsp;
-                    <i class="fas fa-play-circle"></i> Adaptive stream&nbsp;
-                    <i class="fas fa-desktop"></i> Desktop/Mobile
-                </span>
-                <br><br>
-                <b>Total visits:</b>&nbsp;<span id="visitCount" class="text-e50914 font-bold">...</span><br><br>
-                <b>Contact:</b><br>
-                <a href="https://t.me/harleyiptvph" class="footer-link text-e50914" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
-            </p>
-            <div class="text-xs text-gray-400 mt-4 italic">
-                Not affiliated with any TV network. For personal and educational viewing only.<br>
-                &copy; 2025 TVPinas
+            <div class="about-content">
+                <div class="about-features">
+                    <div class="feature-row">
+                        <i class="fas fa-bolt feature-icon" style="color:#FFC300"></i>
+                        <span class="feature-label">Fast streaming</span>
+                    </div>
+                    <div class="feature-row">
+                        <i class="fas fa-layer-group feature-icon" style="color:#36CFC9"></i>
+                        <span class="feature-label">Organized categories</span>
+                    </div>
+                    <div class="feature-row">
+                        <i class="fas fa-search feature-icon" style="color:#2F80ED"></i>
+                        <span class="feature-label">Instant search</span>
+                    </div>
+                    <div class="feature-row">
+                        <i class="fas fa-play-circle feature-icon" style="color:#E50914"></i>
+                        <span class="feature-label">Adaptive playback</span>
+                    </div>
+                    <div class="feature-row">
+                        <i class="fas fa-desktop feature-icon" style="color:#9B51E0"></i>
+                        <span class="feature-label">Desktop & Mobile support</span>
+                    </div>
+                </div>
+                <div class="about-desc">
+                    <p>
+                        <span class="about-highlight">TVPinas</span> is a modern IPTV platform for Philippine channels.
+                        Enjoy seamless streaming, quick access, and an intuitive user experience powered by <b>Shaka Player</b> and <b>Firebase</b>.
+                    </p>
+                    <p class="about-contact">
+                        <b>Contact:</b>
+                        <a href="https://t.me/harleyiptvph" class="footer-link" style="color:#2AABEE;" target="_blank">
+                            <i class="fab fa-telegram-plane"></i> Telegram
+                        </a>
+                    </p>
+                    <div class="about-disclaimer">
+                        <small>
+                            <i class="fas fa-exclamation-circle" style="color:#FFC300"></i>
+                            Not affiliated with any TV network.<br>
+                            For personal and educational viewing only.<br>
+                            &copy; 2025 TVPinas
+                        </small>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+
+    <!-- Visit counter below the page -->
+    <div class="visit-counter">
+        Total visits: <span id="visitCount">...</span>
     </div>
 
     <script>
@@ -173,11 +367,12 @@
                 counterRef.set({ count: 1 }, { merge: true });
             });
         }
+        // Update on load
+        updateVisits();
 
         // About overlay logic
         document.getElementById('aboutBtn')?.addEventListener('click', () => {
             document.getElementById('aboutOverlay').classList.add('active');
-            updateVisits();
         });
         document.getElementById('closeAbout').addEventListener('click', () => {
             document.getElementById('aboutOverlay').classList.remove('active');
