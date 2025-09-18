@@ -1,395 +1,442 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>TVPinas Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Bootstrap & Bootstrap Icons -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-  <style>
-    body {
-      min-height: 100vh;
-      background: linear-gradient(135deg,#0c0c0c 70%,#18181b 100%);
-      color: #fff;
-      font-family: 'Inter', sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: fadeInBg 1.2s;
-    }
-    @keyframes fadeInBg {
-      from {opacity:0;}
-      to {opacity:1;}
-    }
-    .container {
-      background: rgba(24,24,27,0.98);
-      border-radius: 1.4rem;
-      padding: 2.7rem 2.3rem 2rem 2.3rem;
-      box-shadow: 0 18px 48px 0 #000c, 0 2.5px 0 #007bff;
-      max-width: 370px;
-      width: 100%;
-      margin: 32px auto;
-      animation: popIn .7s;
-    }
-    @keyframes popIn {
-      0% {transform: scale(0.95) translateY(10px); opacity:0;}
-      60% {transform: scale(1.05) translateY(-8px);}
-      100% {transform: scale(1) translateY(0); opacity:1;}
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 2.2rem;
-      font-weight: 800;
-      letter-spacing: 0.02em;
-      color: #007bff;
-      font-size: 2.1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap:0.5rem;
-    }
-    .ph-flag {
-      width: 2.1rem;
-      height: 2.1rem;
-      border-radius: .4rem;
-      box-shadow:0 3px 12px #007bff44;
-      vertical-align: middle;
-      margin-right: .35em;
-    }
-    .input-group {
-      position: relative;
-      margin-bottom: 1.1rem;
-      display: flex;
-      align-items: center;
-      background: #191923;
-      border-radius: 0.6rem;
-      box-shadow: 0 1.5px 0 #007bff55;
-      border: 1.5px solid #222635;
-      padding: 0.1rem 0.1rem 0.1rem 2.2rem;
-      transition: box-shadow .23s, border .23s;
-    }
-    .input-group:focus-within {
-      border: 2px solid #007bff;
-      box-shadow: 0 3px 22px #007bff22;
-    }
-    .input-group input {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: #fff;
-      width: 100%;
-      padding: 0.7rem 0.8rem 0.7rem 0.2rem;
-      font-size: 1.1rem;
-      font-family: 'Inter', sans-serif;
-      letter-spacing: 0.01em;
-    }
-    .input-group input::placeholder {
-      color: #7bbcff;
-      font-weight: 400;
-      opacity: 0.8;
-      letter-spacing:.05em;
-    }
-    .form-icon {
-      position: absolute;
-      left: 0.7rem;
-      color: #007bff;
-      font-size: 1.3rem;
-      top: 50%;
-      transform: translateY(-50%);
-      opacity: 0.88;
-    }
-    .btn-primary {
-      background: linear-gradient(90deg,#007bff 80%,#1e90ff 100%);
-      border: none;
-      border-radius: .7rem;
-      font-size: 1.12rem;
-      font-weight: 600;
-      padding: .75rem 1.6rem;
-      box-shadow: 0 2px 18px #007bff33;
-      transition: background .19s, box-shadow .19s, transform .13s;
-      outline: none;
-      display: inline-flex;
-      align-items: center;
-      gap:.7em;
-    }
-    .btn-primary:hover, .btn-primary:focus {
-      background: linear-gradient(90deg,#0056c7 80%,#0a58ca 100%);
-      box-shadow: 0 4px 30px #007bff44;
-      transform: scale(1.04) translateY(-1.5px);
-    }
-    .link {
-      display: block;
-      color: #7bbcff;
-      margin: 0.9rem auto 0.1rem auto;
-      text-align: center;
-      text-decoration: none;
-      font-size: 1.02rem;
-      transition: color .18s;
-      cursor: pointer;
-      font-weight: 500;
-    }
-    .link i { color:#007bff; margin-right:0.3em;}
-    .link:hover { color: #fff; text-decoration:underline; }
-    .hidden {
-      display: none !important;
-    }
-    .message {
-      margin-top: 1.15rem;
-      text-align: center;
-      font-weight: 600;
-      font-size: 1.08rem;
-      min-height: 1.5em;
-      transition: color .15s;
-    }
-    input:-webkit-autofill, input:-webkit-autofill:focus, input:-webkit-autofill:hover {
-      -webkit-box-shadow: 0 0 0 1000px #191923 inset;
-      -webkit-text-fill-color: #fff !important;
-      caret-color: #007bff;
-    }
-    @media (max-width: 480px) {
-      .container {
-        padding: 1.2rem 0.6rem 1.2rem 0.6rem;
-        max-width: 97vw;
-      }
-      h2 { font-size: 1.3rem; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TVPinas IPTV Player</title>
+    <link rel="icon" type="image/png" href="https://img.icons8.com/color/48/television.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.6.0/shaka-player.compiled.js"></script>
+    <!-- Use compat version for both app and firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        /* ...your styles unchanged... */
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #18181b 40%, #1a202c 100%); color: #fff; }
+        .hero-gradient { background-image: linear-gradient(to right, rgba(0,0,0,0.8) 20%, rgba(0,0,0,0.2) 60%, transparent 100%);}
+        .row-container::-webkit-scrollbar {display: none;}
+        .row-container { -ms-overflow-style: none; scrollbar-width: none;}
+        .channel-tile { transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.2s; flex-shrink: 0; position: relative; overflow: visible;}
+        .channel-tile:hover, .channel-tile:focus { transform: scale(1.08) rotate(-2deg); z-index: 20; box-shadow: 0 14px 32px rgba(0,0,0,0.7), 0 0 0 3px #e50914;}
+        .channel-tile:focus { outline: 3px solid #fff; }
+        .channel-tile .channel-play { opacity: 0; transition: opacity 0.2s, transform 0.2s; position: absolute; bottom: 16px; right: 16px; background: #e50914; color: #fff; border-radius: 50%; width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; box-shadow: 0 6px 20px rgba(0,0,0,0.5); transform: scale(0.85);}
+        .channel-tile:hover .channel-play, .channel-tile:focus .channel-play { opacity: 1; transform: scale(1.07);}
+        .row-arrow { opacity: 0; transition: opacity 0.2s; background-color: rgba(0,0,0,0.5);}
+        .row:hover .row-arrow { opacity: 1;}
+        .loader { border: 5px solid #4b5563; border-top: 5px solid #e50914; border-radius: 50%; width: 60px; height: 60px; animation: spin 1.2s linear infinite;}
+        @keyframes spin { 0% {transform: rotate(0deg);} 100% {transform: rotate(360deg);} }
+        .view { transition: opacity 0.3s; }
+        .view.hidden { opacity: 0; pointer-events: none; }
+        .search-bar { background: #18181b; color: #fff; border: none; padding: 0.75rem 1.25rem; border-radius: 0.5rem; font-size: 1.125rem; width: 100%; margin-bottom: 2rem; box-shadow: 0 2px 8px #0004;}
+        .search-bar:focus { outline: 2px solid #e50914; }
+        .channel-logo { max-height: 68px; object-fit: contain; margin-bottom: 0.5rem; filter: drop-shadow(0 1px 6px #0006);}
+        footer { background: transparent; color: #b3b3b3; padding: 2rem 0; }
+        .footer-link { color: #b3b3b3; text-decoration: underline; }
+        .footer-link:hover { color: #fff; }
+        .footer-icons a { margin-right: 1rem; color: #e50914; font-size: 2rem; transition: color 0.2s, transform 0.2s; filter: drop-shadow(0 2px 8px #e5091450);}
+        .footer-icons a:hover { color: #fff; transform: scale(1.18) rotate(-8deg);}
+        .category-icon { font-size: 1.3em; margin-right: 0.45em; vertical-align: middle; }
+        .about-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s;}
+        .about-overlay.active { opacity: 1; pointer-events: auto;}
+        .about-modal { background: #18181b; color: #fff; border-radius: 1rem; padding: 2rem 1.2rem; width: 90vw; max-width: 400px; max-height: 92vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.6); position: relative; text-align: center; animation: fadeInModal 0.45s cubic-bezier(.38,2,.46,.87);}
+        @media (max-width: 500px) { .about-modal { padding: 1rem 0.4rem; max-width: 98vw; }}
+        @keyframes fadeInModal { from { opacity: 0; transform: scale(.95) translateY(24px);} to { opacity: 1; transform: scale(1) translateY(0);}}
+        .about-close { position: absolute; right: 1rem; top: 1rem; background: none; border: none; font-size: 2rem; color: #b3b3b3; cursor: pointer; transition: color 0.15s, transform 0.18s;}
+        .about-close:hover { color: #e50914; transform: rotate(8deg);}
+        .about-logo { width: 65px; height: 65px; margin-bottom: 1rem; border-radius: 12px; background: #18181b; box-shadow: 0 2px 16px rgba(255,255,255,0.07); display: inline-block; animation: popLogo 0.8s cubic-bezier(.38,2,.46,.87);}
+        @keyframes popLogo { 0% { transform: scale(0.7);} 70% { transform: scale(1.16);} 100% { transform: scale(1);}}
+    </style>
 </head>
-<body>
-  <div class="container">
-    <h2>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_the_Philippines.svg" alt="PH Flag" class="ph-flag" />
-      TVPinas
-    </h2>
-    <!-- Login Form -->
-    <div id="loginForm">
-      <div class="input-group">
-        <i class="bi bi-person-fill form-icon"></i>
-        <input type="text" id="loginUserOrEmail" placeholder="Email or Username" required autocomplete="username">
-      </div>
-      <div class="input-group">
-        <i class="bi bi-lock-fill form-icon"></i>
-        <input type="password" id="loginPassword" placeholder="Password" required autocomplete="current-password">
-      </div>
-      <div class="d-flex justify-content-center">
-        <button id="loginBtn" class="btn btn-primary px-5" style="width:auto;">
-          <i class="bi bi-box-arrow-in-right"></i> Login
+<body class="overflow-x-hidden">
+
+    <!-- Main Browse View -->
+    <div id="browseView" class="view">
+        <section id="hero" class="relative h-[60vh] min-h-[400px] w-full flex items-center text-white bg-cover bg-center bg-no-repeat" style="background-image: url('https://placehold.co/1920x1080/1a202c/718096?text=TVPinas+Player');">
+            <div class="hero-gradient absolute inset-0"></div>
+            <div class="relative z-10 p-8 md:p-16 max-w-2xl">
+                <h1 id="heroChannelName" class="text-4xl md:text-6xl font-extrabold drop-shadow-lg flex items-center gap-3">
+                    <img src="https://img.icons8.com/color/48/television.png" class="inline w-12 h-12" alt="TVPinas logo">
+                    <span>Channel Name</span>
+                </h1>
+                <p class="mt-4 text-lg max-w-prose text-gray-200 drop-shadow-md">
+                    Enjoy a modern IPTV experience: fast search, categorized browsing, and adaptive playback for top PH channels.
+                </p>
+                <div class="mt-8 flex space-x-4">
+                    <button id="heroPlayButton" class="flex items-center justify-center bg-white text-black font-bold py-3 px-8 rounded-full hover:bg-gray-200 transition-all shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-e50914">
+                        <i class="fas fa-play mr-2"></i> Play
+                    </button>
+                </div>
+            </div>
+        </section>
+        <main id="rowsContainer" class="p-8 md:p-12 -mt-16 relative z-10">
+            <input type="text" id="searchInput" class="search-bar" placeholder="Search for a channel...">
+        </main>
+    </div>
+
+    <!-- Player View -->
+    <div id="playerView" class="view hidden fixed inset-0 bg-black flex items-center justify-center z-50">
+        <video id="videoPlayer" class="w-full h-full" controls autoplay></video>
+        <div id="loading" class="loader absolute hidden"></div>
+        <button id="backToBrowse" class="absolute top-5 left-5 z-50 bg-black bg-opacity-50 rounded-full w-12 h-12 flex items-center justify-center text-2xl hover:bg-opacity-75 transition-all shadow-xl">
+            <i class="fas fa-arrow-left"></i>
         </button>
-      </div>
-      <a class="link" id="showSignup"><i class="bi bi-person-plus"></i> Don't have an account? Sign Up</a>
-      <a class="link" id="showForgot"><i class="bi bi-key"></i> Forgot Password?</a>
     </div>
-    <!-- Signup Form -->
-    <div id="signupForm" class="hidden">
-      <div class="input-group">
-        <i class="bi bi-person-fill form-icon"></i>
-        <input type="text" id="signupUsername" placeholder="Username" required autocomplete="username">
-      </div>
-      <div class="input-group">
-        <i class="bi bi-envelope-fill form-icon"></i>
-        <input type="email" id="signupEmail" placeholder="Email" required autocomplete="email">
-      </div>
-      <div class="input-group">
-        <i class="bi bi-lock-fill form-icon"></i>
-        <input type="password" id="signupPassword" placeholder="Password" required autocomplete="new-password">
-      </div>
-      <div class="d-flex justify-content-center">
-        <button id="signupBtn" class="btn btn-primary px-5" style="width:auto;">
-          <i class="bi bi-person-plus"></i> Sign Up
-        </button>
-      </div>
-      <a class="link" id="showLoginFromSignup"><i class="bi bi-arrow-left"></i> Already have an account? Login</a>
+
+    <footer class="w-full mt-16">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 px-4">
+            <div class="flex items-center gap-2 text-lg font-semibold tracking-wide">
+                <img src="https://img.icons8.com/color/48/television.png" class="w-8 h-8" alt="TVPinas logo">
+                <span>TVPinas &copy; 2025</span>
+            </div>
+            <div class="footer-icons mb-2 md:mb-0">
+                <a href="https://t.me/harleyiptvph" target="_blank" title="Telegram">
+                    <i class="fab fa-telegram-plane"></i>
+                </a>
+            </div>
+            <div>
+                <button id="aboutBtn" class="text-2xl text-b3b3b3 hover:text-e50914 focus:outline-none transition-all" title="About">
+                    <i class="fas fa-info-circle"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- About Overlay -->
+    <div id="aboutOverlay" class="about-overlay">
+        <div class="about-modal">
+            <button class="about-close" id="closeAbout" title="Close">&times;</button>
+            <img src="https://img.icons8.com/color/96/television.png" class="about-logo" alt="TVPinas logo">
+            <h2 class="text-2xl font-bold mb-2 flex items-center justify-center gap-2">
+                <i class="fas fa-tv text-e50914"></i> About TVPinas
+            </h2>
+            <p class="mb-4 text-gray-300">
+                <span class="inline-flex items-center gap-2 font-semibold text-lg text-e50914">
+                    <i class="fas fa-bolt"></i> Fast&nbsp; 
+                    <i class="fas fa-layer-group"></i> Grouped&nbsp; 
+                    <i class="fas fa-mobile-alt"></i> Responsive
+                </span><br>
+                Modern demo IPTV player for PH channels. Powered by Shaka Player, Firebase, and a sleek UI.<br>
+                <br>
+                <b>Features:</b><br>
+                <span class="inline-flex items-center gap-2">
+                    <i class="fas fa-search"></i> Fast search&nbsp; 
+                    <i class="fas fa-th-large"></i> Categories&nbsp;
+                    <i class="fas fa-play-circle"></i> Adaptive stream&nbsp;
+                    <i class="fas fa-desktop"></i> Desktop/Mobile
+                </span>
+                <br><br>
+                <b>Total visits:</b>&nbsp;<span id="visitCount" class="text-e50914 font-bold">...</span><br><br>
+                <b>Contact:</b><br>
+                <a href="https://t.me/harleyiptvph" class="footer-link text-e50914" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram</a>
+            </p>
+            <div class="text-xs text-gray-400 mt-4 italic">
+                Not affiliated with any TV network. For personal and educational viewing only.<br>
+                &copy; 2025 TVPinas
+            </div>
+        </div>
     </div>
-    <!-- Forgot Password Form -->
-    <div id="forgotForm" class="hidden">
-      <div class="input-group">
-        <i class="bi bi-envelope-fill form-icon"></i>
-        <input type="email" id="forgotEmail" placeholder="Enter your email" required autocomplete="username">
-      </div>
-      <div class="d-flex justify-content-center">
-        <button id="forgotBtn" class="btn btn-primary px-5" style="width:auto;">
-          <i class="bi bi-arrow-repeat"></i> Reset Password
-        </button>
-      </div>
-      <a class="link" id="showLoginFromForgot"><i class="bi bi-arrow-left"></i> Back to Login</a>
-    </div>
-    <div id="message" class="message"></div>
-    <div style="margin-top: 18px;text-align:center;font-size:0.92rem;opacity:0.7;">
-      <i class="bi bi-c-circle"></i> 2025 TVPinas. All rights reserved.
-    </div>
-  </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { 
-      getAuth, 
-      createUserWithEmailAndPassword, 
-      signInWithEmailAndPassword, 
-      sendPasswordResetEmail 
-    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-    import { 
-      getFirestore, 
-      doc, 
-      setDoc, 
-      serverTimestamp,
-      query,
-      where,
-      collection,
-      getDocs
-    } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-
-    // Firebase Config
-    const firebaseConfig = {
-      apiKey: "AIzaSyAOD_WjTx_QV4NmdWOA1qn1iw2Bfhck8do",
-      authDomain: "harley1-dc7c4.firebaseapp.com",
-      projectId: "harley1-dc7c4",
-      storageBucket: "harley1-dc7c4.appspot.com",
-      messagingSenderId: "364436057378",
-      appId: "1:364436057378:web:4e6a59f39f132e0dc1897b",
-      measurementId: "G-XJDDS9HC2S"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const loginForm = document.getElementById("loginForm");
-    const signupForm = document.getElementById("signupForm");
-    const forgotForm = document.getElementById("forgotForm");
-    const message = document.getElementById("message");
-
-    // Switch forms
-    document.getElementById("showSignup").onclick = () => {
-      loginForm.classList.add("hidden");
-      signupForm.classList.remove("hidden");
-      forgotForm.classList.add("hidden");
-      message.textContent = "";
-    };
-    document.getElementById("showLoginFromSignup").onclick = () => {
-      signupForm.classList.add("hidden");
-      loginForm.classList.remove("hidden");
-      message.textContent = "";
-    };
-    document.getElementById("showForgot").onclick = () => {
-      loginForm.classList.add("hidden");
-      forgotForm.classList.remove("hidden");
-      signupForm.classList.add("hidden");
-      message.textContent = "";
-    };
-    document.getElementById("showLoginFromForgot").onclick = () => {
-      forgotForm.classList.add("hidden");
-      loginForm.classList.remove("hidden");
-      message.textContent = "";
-    };
-
-    // Login with email OR username
-    document.getElementById("loginBtn").onclick = async () => {
-      const userOrEmail = document.getElementById("loginUserOrEmail").value.trim();
-      const password = document.getElementById("loginPassword").value;
-      message.textContent = "";
-
-      async function loginWithEmail(email, password) {
-        try {
-          await signInWithEmailAndPassword(auth, email, password);
-          localStorage.setItem('tvpinas_loggedin', 'true');
-          window.location.href = "index2.html";
-        } catch (error) {
-          message.style.color = "red";
-          message.textContent = "Login failed: " + error.message;
-        }
-      }
-
-      if (!userOrEmail) {
-        message.style.color = "red";
-        message.textContent = "Please enter your email or username.";
-        return;
-      }
-
-      // Check if input is an email
-      if (userOrEmail.includes("@")) {
-        loginWithEmail(userOrEmail, password);
-      } else {
-        // Assume it's a username; look up email from Firestore
-        try {
-          const q = query(collection(db, "users"), where("user", "==", userOrEmail));
-          const querySnapshot = await getDocs(q);
-          if (querySnapshot.empty) {
-            message.style.color = "red";
-            message.textContent = "No user found with that username.";
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Prevent bypass: redirect to login if not logged in
+        if (!localStorage.getItem('tvpinas_loggedin')) {
+            window.location.replace('index.html');
             return;
-          }
-          const userDoc = querySnapshot.docs[0];
-          const email = userDoc.data().email;
-          if (!email) {
-            message.style.color = "red";
-            message.textContent = "No email found for that username.";
-            return;
-          }
-          loginWithEmail(email, password);
-        } catch (error) {
-          message.style.color = "red";
-          message.textContent = "Login failed: " + error.message;
         }
-      }
-    };
 
-    // Signup
-    document.getElementById("signupBtn").onclick = async () => {
-      const username = document.getElementById("signupUsername").value.trim();
-      const email = document.getElementById("signupEmail").value;
-      const password = document.getElementById("signupPassword").value;
-      message.textContent = "";
+        // Firebase setup
+        const firebaseConfig = {
+            apiKey: "AIzaSyAOD_WjTx_QV4NmdWOA1qn1iw2Bfhck8do",
+            authDomain: "harley1-dc7c4.firebaseapp.com",
+            projectId: "harley1-dc7c4",
+            storageBucket: "harley1-dc7c4.appspot.com",
+            messagingSenderId: "364436057378",
+            appId: "1:364436057378:web:4e6a59f39f132e0dc1897b",
+            measurementId: "G-XJDDS9HC2S"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
 
-      if (!username) {
-        message.style.color = "red";
-        message.textContent = "Please enter a username.";
-        return;
-      }
-      try {
-        const q = query(collection(db, "users"), where("user", "==", username));
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          message.style.color = "red";
-          message.textContent = "Username is already taken.";
-          return;
+        // Visit Counter
+        const visitCountEl = document.getElementById('visitCount');
+        function updateVisits() {
+            const counterRef = db.collection('counters').doc('visits');
+            counterRef.get().then(doc => {
+                let count = 0;
+                if (doc.exists && typeof doc.data().count === 'number') count = doc.data().count;
+                visitCountEl.textContent = count;
+            });
+            counterRef.update({ count: firebase.firestore.FieldValue.increment(1) }).catch(() => {
+                counterRef.set({ count: 1 }, { merge: true });
+            });
         }
-      } catch (err) {}
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const uid = userCredential.user.uid;
-        await setDoc(doc(db, "users", uid), {
-          email: email,
-          accounttype: "free",
-          created: serverTimestamp(),
-          user: username
+
+        // About overlay logic
+        document.getElementById('aboutBtn')?.addEventListener('click', () => {
+            document.getElementById('aboutOverlay').classList.add('active');
+            updateVisits();
         });
-        message.style.color = "green";
-        message.textContent = "Signup successful! You can now login.";
-        setTimeout(() => {
-          signupForm.classList.add("hidden");
-          loginForm.classList.remove("hidden");
-          message.textContent = "";
-        }, 2000);
-      } catch (error) {
-        message.style.color = "red";
-        message.textContent = "Signup failed: " + error.message;
-      }
-    };
+        document.getElementById('closeAbout').addEventListener('click', () => {
+            document.getElementById('aboutOverlay').classList.remove('active');
+        });
+        document.getElementById('aboutOverlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('aboutOverlay')) 
+                document.getElementById('aboutOverlay').classList.remove('active');
+        });
 
-    // Forgot Password
-    document.getElementById("forgotBtn").onclick = async () => {
-      const email = document.getElementById("forgotEmail").value;
-      message.textContent = "";
-      try {
-        await sendPasswordResetEmail(auth, email);
-        message.style.color = "green";
-        message.textContent = "Password reset email sent!";
-      } catch (error) {
-        message.style.color = "red";
-        message.textContent = "Error: " + error.message;
-      }
-    };
-  </script>
+        // IPTV logic
+        const browseView = document.getElementById('browseView');
+        const playerView = document.getElementById('playerView');
+        const video = document.getElementById('videoPlayer');
+        const loading = document.getElementById('loading');
+        const backToBrowseBtn = document.getElementById('backToBrowse');
+        const rowsContainer = document.getElementById('rowsContainer');
+        const heroSection = document.getElementById('hero');
+        const heroChannelName = document.getElementById('heroChannelName');
+        const heroPlayButton = document.getElementById('heroPlayButton');
+        const searchInput = document.getElementById('searchInput');
+
+        let shakaPlayer = null;
+        let featuredChannel = null;
+        let allChannels = [];
+        let filteredChannels = [];
+
+        const categories = {
+            "All Channels": [],
+            "Philippines":   ['abs', 'gma', 'tfc', 'kapamilya', 'cinema one', 'jeepney', 'knowledge channel', 'knowledge ch', 'cignal', 'tv5', 'one sports', 'ptv', 'untv', 'net25', 'a2z', 'light tv', 'inc tv', 'cig', 'pba', 'cnn philippines', 'solar sports', 'cnn ph', 'dzbb', 'dzrh', 'gcnn', 'smni', 'ibc', 'one ph', 'pinoy', 'cignaltv', 'gma news', 'gma regional', 'gma life', 'gma heart', 'gma pinoy', 'gma sports', 'gma music', 'gma kids', 'gma drama', 'gma comedy', 'gma movies', 'gma anime', 'gma docu', 'gma public affairs', 'gma lifestyle', 'gma regional tv', 'cignal play', 'cignal live', 'cignal now', 'cignal streaming', 'cignal hd', 'cignal sd', 'cignal cable', 'cignal satellite', 'cignal prepaid', 'cignal postpaid', 'cignal account', 'cignal app', 'cignal box', 'cignal channels', 'cignal guide', 'cignal help', 'cignal info', 'cignal load', 'cignal online', 'cignal package', 'cignal plan', 'cignal promo', 'cignal tv', 'tfc'],
+            "GMA":          ['gma', 'gma news', 'gma pinoy', 'gma heart', 'gma life', 'gma sports', 'gma music', 'gma kids', 'gma drama', 'gma comedy', 'gma movies', 'gma anime', 'gma docu', 'gma public affairs', 'gma lifestyle', 'gma regional', 'gma regional tv'],
+            "TFC":          ['tfc', 'kapamilya', 'cinema one', 'jeepney', 'knowledge channel', 'knowledge ch', 'a2z'],
+            "CIG":          ['cig', 'cignal', 'cignal play', 'cignal live', 'cignal now', 'cignal streaming', 'cignal hd', 'cignal sd', 'cignal cable', 'cignal satellite', 'cignal prepaid', 'cignal postpaid', 'cignal account', 'cignal app', 'cignal box', 'cignal channels', 'cignal guide', 'cignal help', 'cignal info', 'cignal load', 'cignal online', 'cignal package', 'cignal plan', 'cignal promo', 'cignal tv'],
+            "Movies":       ['movie', 'hbo', 'cinemax', 'hits', 'thrill', 'celestial', 'tvn', 'sky movies', 'fox movies', 'mgm', 'tcm', 'axn', 'star movies', 'star gold', 'movies now', 'sony pix', 'mnx', 'wb movies', 'zee studio'],
+            "Entertainment":['axn', 'warner', 'one', 'paramount', 'rock', 'animax', 'dreamworks', 'scm', 'kplus'],
+            "Documentaries":['natgeo', 'discovery', 'history', 'animal planet', 'bbc earth', 'crime'],
+            "Lifestyle":    ['lifestyle', 'tlc', 'food', 'hgtv', 'fashion']
+        };
+        const categoryIcons = {
+            "All Channels": '<i class="fas fa-th-large category-icon text-white"></i>',
+            "Philippines":   '<i class="fas fa-flag category-icon text-blue-400"></i>',
+            "GMA":           '<img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/GMA_Network_logo_2017.png" class="category-icon" style="height:1.5em;display:inline" alt="GMA">',
+            "TFC":           '<img src="https://static.wikia.nocookie.net/logopedia/images/4/48/TFC_2013.png" class="category-icon" style="height:1.5em;display:inline" alt="TFC">',
+            "CIG":           '<img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/Cignal_TV_logo_%28new%29.png" class="category-icon" style="height:1.5em;display:inline" alt="CIG">',
+            "Movies":        '<i class="fas fa-film category-icon text-red-400"></i>',
+            "Entertainment": '<i class="fas fa-tv category-icon text-pink-400"></i>',
+            "Documentaries": '<i class="fas fa-book category-icon text-green-400"></i>',
+            "Lifestyle":     '<i class="fas fa-utensils category-icon text-yellow-400"></i>'
+        };
+
+        function categorizeChannels(channelList) {
+            const categorized = {};
+            for (const category in categories) categorized[category] = [];
+            categorized["All Channels"] = [...channelList];
+            channelList.forEach(channel => {
+                const lowerCaseName = channel.name.toLowerCase();
+                for (const category in categories) {
+                    if (category === "All Channels") continue;
+                    if (categories[category].some(keyword => lowerCaseName.includes(keyword))) {
+                        categorized[category].push(channel);
+                        break;
+                    }
+                }
+            });
+            return categorized;
+        }
+
+        function createChannelTile(channel) {
+            const tile = document.createElement('div');
+            tile.className = 'channel-tile w-60 h-36 bg-gray-800 rounded-xl flex flex-col items-center justify-center p-3 cursor-pointer text-center relative shadow-md hover:shadow-2xl';
+            tile.tabIndex = 0;
+            let content = '';
+            if (channel.logoUrl) {
+                content += `<img src="${channel.logoUrl}" alt="${channel.name} Logo" class="channel-logo relative z-10" loading="lazy">`;
+            }
+            content += `<span class="relative z-10 font-bold text-lg">${channel.name}</span>`;
+            content += `<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>`;
+            content += `<span class="channel-play absolute"><i class="fas fa-play"></i></span>`;
+            tile.innerHTML = content;
+            if (channel.logoUrl) {
+                const img = tile.querySelector('img');
+                img.onerror = function() {
+                    img.src = "https://img.icons8.com/color/48/television.png";
+                };
+            }
+            tile.addEventListener('click', () => {
+                loadChannel(channel.url, channel.name, channel.key);
+                showPlayerView();
+            });
+            tile.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    loadChannel(channel.url, channel.name, channel.key);
+                    showPlayerView();
+                }
+            });
+            return tile;
+        }
+
+        function createRow(category, channels) {
+            if (category === "All Channels" && channels.length < 2) return null;
+            const rowWrapper = document.createElement('div');
+            rowWrapper.className = 'mb-8 row group';
+            const title = document.createElement('h2');
+            title.className = 'text-2xl font-bold mb-4 flex items-center gap-2';
+            title.innerHTML = (categoryIcons[category] || '') + category;
+            const rowContainer = document.createElement('div');
+            rowContainer.className = 'relative';
+            const rowContent = document.createElement('div');
+            rowContent.className = 'row-container flex items-center space-x-4 overflow-x-auto pb-4';
+            channels.forEach(channel => rowContent.appendChild(createChannelTile(channel)));
+            const leftArrow = document.createElement('button');
+            leftArrow.className = 'row-arrow absolute left-0 top-0 bottom-0 px-4 z-20 hover:bg-black/75';
+            leftArrow.innerHTML = '<i class="fas fa-chevron-left"></i>';
+            leftArrow.addEventListener('click', () => {
+                rowContent.scrollBy({ left: -rowContent.clientWidth * 0.8, behavior: 'smooth' });
+            });
+            const rightArrow = document.createElement('button');
+            rightArrow.className = 'row-arrow absolute right-0 top-0 bottom-0 px-4 z-20 hover:bg-black/75';
+            rightArrow.innerHTML = '<i class="fas fa-chevron-right"></i>';
+            rightArrow.addEventListener('click', () => {
+                rowContent.scrollBy({ left: rowContent.clientWidth * 0.8, behavior: 'smooth' });
+            });
+            rowContainer.append(leftArrow, rightArrow, rowContent);
+            rowWrapper.append(title, rowContainer);
+            return rowWrapper;
+        }
+
+        function renderUI() {
+            const categorized = categorizeChannels(filteredChannels);
+            const children = Array.from(rowsContainer.children);
+            children.forEach(child => {
+                if (child !== searchInput) rowsContainer.removeChild(child);
+            });
+            let anyResults = false;
+            for (const category of Object.keys(categorized)) {
+                if (categorized[category].length > 0) {
+                    const row = createRow(category, categorized[category]);
+                    if (row) {
+                        rowsContainer.appendChild(row);
+                        anyResults = true;
+                    }
+                }
+            }
+            if (!anyResults) {
+                const noResult = document.createElement('div');
+                noResult.textContent = "No channels found.";
+                noResult.className = "text-center text-xl font-semibold text-gray-400 mt-8";
+                rowsContainer.appendChild(noResult);
+            }
+            let heroCats = categorized["Philippines"];
+            if (!heroCats.length) heroCats = categorized["Movies"];
+            if (!heroCats.length) heroCats = categorized["All Channels"];
+            if (heroCats.length > 0) {
+                featuredChannel = heroCats[Math.floor(Math.random() * heroCats.length)];
+                heroChannelName.innerHTML = `<img src="https://img.icons8.com/color/48/television.png" class="inline w-12 h-12" alt="TVPinas logo"> <span>${featuredChannel.name}</span>`;
+                const placeholderImageUrl = `https://placehold.co/1920x1080/1f2937/a0aec0?text=${encodeURIComponent(featuredChannel.name)}`;
+                heroSection.style.backgroundImage = `url('${placeholderImageUrl}')`;
+            }
+        }
+
+        function showPlayerView() {
+            browseView.classList.add('hidden');
+            playerView.classList.remove('hidden');
+        }
+        function showBrowseView() {
+            playerView.classList.add('hidden');
+            browseView.classList.remove('hidden');
+            if (shakaPlayer) shakaPlayer.destroy();
+            video.pause();
+            video.src = "";
+        }
+        function isManifestUrl(url) {
+            return url.endsWith('.mpd') || url.endsWith('.m3u8');
+        }
+
+        async function loadChannel(url, name, key) {
+            loading.classList.remove('hidden');
+            if (shakaPlayer) shakaPlayer.destroy();
+            video.pause();
+            video.src = "";
+            shaka.polyfill.installAll();
+            if (!shaka.Player.isBrowserSupported()) {
+                loading.classList.add('hidden');
+                alert("Your browser does not support Shaka Player streaming.");
+                showBrowseView();
+                return;
+            }
+            shakaPlayer = new shaka.Player(video);
+            shakaPlayer.addEventListener('error', (event) => {
+                loading.classList.add('hidden');
+                alert(`Error loading channel: ${name}. Stream may be offline or not supported.`);
+                showBrowseView();
+            });
+            if (key && typeof key === 'object' && Object.keys(key).length > 0) {
+                await shakaPlayer.configure({
+                    drm: {
+                        clearKeys: key
+                    }
+                });
+            }
+            try {
+                await shakaPlayer.load(url);
+                video.play().catch(e => {});
+                loading.classList.add('hidden');
+            } catch (e) {
+                loading.classList.add('hidden');
+                alert(`Error loading channel: ${name}. Stream may be offline or not supported.`);
+                showBrowseView();
+            }
+        }
+
+        backToBrowseBtn.addEventListener('click', showBrowseView);
+        heroPlayButton.addEventListener('click', () => {
+            if (featuredChannel) {
+                loadChannel(featuredChannel.url, featuredChannel.name, featuredChannel.key);
+                showPlayerView();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !playerView.classList.contains('hidden')) {
+                showBrowseView();
+            }
+            if(e.key === 'Escape' && document.getElementById('aboutOverlay').classList.contains('active')) {
+                document.getElementById('aboutOverlay').classList.remove('active');
+            }
+        });
+
+        function filterChannelsBySearch(value) {
+            if (!value) return allChannels;
+            value = value.trim().toLowerCase();
+            return allChannels.filter(channel => channel.name.toLowerCase().includes(value));
+        }
+        searchInput.addEventListener('input', () => {
+            filteredChannels = filterChannelsBySearch(searchInput.value);
+            renderUI();
+        });
+
+        async function loadChannelsFromFirebase() {
+            allChannels = [];
+            try {
+                const snapshot = await db.collection("freeserver").get();
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.name && data.url && isManifestUrl(data.url)) {
+                        allChannels.push({
+                            name: data.name,
+                            url: data.url,
+                            logoUrl: data.image || "",
+                            key: data.key || null
+                        });
+                    }
+                });
+            } catch (err) {
+                alert("Failed to load channels from server.");
+            }
+            filteredChannels = allChannels;
+            renderUI();
+        }
+        loadChannelsFromFirebase();
+    });
+    </script>
 </body>
 </html>
